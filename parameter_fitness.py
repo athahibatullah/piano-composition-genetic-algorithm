@@ -1,13 +1,13 @@
 def variasi_nada(komposisi, range_nada, banyak_birama):
-    banyak_nada_list = []
+    variasi_nada_list = []
     for i in range(banyak_birama):
         banyak_nada_digunakan = 1
         for j in range(1, range_nada):
             if j in komposisi[i]:
                 banyak_nada_digunakan += 1
-        banyak_nada_list.append(banyak_nada_digunakan/range_nada)
+        variasi_nada_list.append(banyak_nada_digunakan/range_nada)
 
-    return komposisi, banyak_nada_list
+    return variasi_nada_list
 
 def interval_disonan(komposisi, anggota_birama, range_nada):
     interval_list = {0: [0,1,2,3,4,5,7,8,9,12], 0.5: 10, 1: [6,11,13]}

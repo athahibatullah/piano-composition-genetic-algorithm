@@ -40,5 +40,4 @@ def inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi):
         #         quota -= 1
         alt_nums_core.append(alt_nums)
         komposisi[i] = np.array(randnums)
-    print(pf.stabilitas_kontur(alt_nums_core,anggota_birama))
-    return komposisi
+    return komposisi, np.array(alt_nums_core)
