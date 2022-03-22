@@ -57,13 +57,12 @@ def variasi_irama(komposisi, anggota_birama, range_nada):
         variasi_irama_rekor = 1
         for j in range(anggota_birama-1):
             variasi_irama_counter = 0
-            if komposisi[i][j] == range_nada and j != anggota_birama-2:
-                while komposisi[i][j] == range_nada:
+            if komposisi[i][j] == range_nada and j < anggota_birama-1:
+                while komposisi[i][j] == range_nada and j < anggota_birama-1:
                     variasi_irama_counter += 1
                     if variasi_irama_counter > variasi_irama_rekor:
                         variasi_irama_rekor += 1
                     j+=1
-
         variasi_irama_list.append(variasi_irama_rekor/16)
     return variasi_irama_list
 

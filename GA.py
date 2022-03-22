@@ -49,6 +49,7 @@ def seleksi_turnamen(fitness_individu_list, peserta_turnamen, jumlah_turnamen):
         current_turnamen = []
         current_turnamen = random.sample(fitness_individu_list, peserta_turnamen)
         hasil_seleksi_list.append(max(current_turnamen))
+    
     return hasil_seleksi_list
 
 def mutasi(komposisi, anggota_birama, probabilitas_mutasi, range_nada):
