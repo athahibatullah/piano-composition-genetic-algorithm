@@ -1,13 +1,15 @@
 import numpy as np
 import random
 import GA
-from individu import individu_object
 import parameter_fitness as pf
 import fungsi_fitness as ff
+import csv
+import tone_map as tm
 
 banyak_birama = int(input("Banyak birama: "))
 banyak_individu = int(input("Banyak individu: "))
 probabilitas_mutasi = int(input("Probabilitas mutasi: "))/100
+# banyak_generasi = 100
 range_nada = 14+1
 anggota_birama = 10
 komposisi = np.empty((banyak_birama,anggota_birama))
@@ -23,12 +25,6 @@ def generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, bany
         komposisi_alt_individu_list.append(alt_populasi)
         komposisi = np.empty((banyak_birama,anggota_birama))
     return komposisi_individu_list, komposisi_alt_individu_list
-
-# print(generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu))
-populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu)
-alt_populasi = populasi_awal[1]
-populasi_awal = populasi_awal[0]
-print(populasi_awal)
 
 def hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu):
     total_fitness_list = []
@@ -56,9 +52,6 @@ def hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggo
     
     return total_fitness_list
 
-total_fitness_list = hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu)
-print("Total fitness: " , total_fitness_list)
-
 def update_generasi(populasi_awal, total_fitness_list, banyak_individu):
     fitness_dict = {}
     for i, val in enumerate(total_fitness_list):
@@ -69,14 +62,41 @@ def update_generasi(populasi_awal, total_fitness_list, banyak_individu):
         next_gen_list.append(populasi_awal[fitness_dict[val]])
     return next_gen_list
 
-# print(update_generasi(populasi_awal, total_fitness_list, banyak_individu))
-
 def mutasi_generasi(populasi_awal, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
     individu_mutasi_list = []
     for i in range(banyak_individu):
         individu_mutasi_list.append(GA.mutasi(populasi_awal[i], anggota_birama, probabilitas_mutasi, range_nada))
 
     return individu_mutasi_list
-print("Hasil Mutasi: ")
-print(mutasi_generasi(populasi_awal, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu))  
 
+# max_fitness = 0
+# for i in range(banyak_generasi):
+#     populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu)
+#     alt_populasi = populasi_awal[1]
+#     populasi_awal = populasi_awal[0]
+#     # print(populasi_awal)
+#     total_fitness_list = hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu)
+#     if max_fitness < max(total_fitness_list):
+#         max_fitness = max(total_fitness_list)
+#     print("Total fitness: " , max(total_fitness_list))
+#     # print("Hasil Mutasi: ")
+#     # print(mutasi_generasi(populasi_awal, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu))  
+# print(max_fitness)
+
+if __name__ == "__main__":
+    populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu)
+    alt_populasi = populasi_awal[1]
+    populasi_awal = populasi_awal[0]
+    print(populasi_awal)
+    total_fitness_list = hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu)
+    print("Total fitness: " , max(total_fitness_list))
+
+    for i in range(len(populasi_awal)):
+        print(tm.translate(populasi_awal[i], anggota_birama, range_nada))
+
+    with open('composition.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        for i in range(len(populasi_awal)):
+            writer.writerow(populasi_awal[i])
+# print("Hasil Mutasi: ")
+# print(mutasi_generasi(populasi_awal, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)) 
