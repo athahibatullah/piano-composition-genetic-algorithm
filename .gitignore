@@ -3,5 +3,7 @@ LilyPond.lnk
 test.log
 test.ly
 test.pdf
+test.txt
 composition.csv
+composition_translated.csv
 comp.py
