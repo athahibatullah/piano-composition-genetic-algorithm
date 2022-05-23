@@ -4,6 +4,14 @@ test.log
 test.ly
 test.pdf
 test.txt
+test_midi.log
+test_midi.ly
+test_midi.mid
+test_midi.pdf
+d.log
+d.ly
+d.mid
+d.pdf
 composition.csv
 composition_translated.csv
 comp.py
