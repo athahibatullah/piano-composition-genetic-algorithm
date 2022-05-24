@@ -107,11 +107,14 @@ if __name__ == "__main__":
         duration = False
         for j in range(len(translated[i])):
             if '1' in translated[i][j]:
-                temp = str(translated[i][j]).replace('1', str(4))
+                temp = str(translated[i][j]).replace('1', str(2))
                 translated[i][j] = temp
             elif '2' in translated[i][j]:
-                temp = str(translated[i][j]).replace('2', str(2))
-                translated[i][j] = temp   
+                temp = str(translated[i][j]).replace('2', str(1))
+                translated[i][j] = temp
+            else:
+                temp = str(translated[i][j]) + '4'
+                translated[i][j] = temp
             translated_string += translated[i][j] + ' '
         translated_string_list.append(translated_string)
         translated_string = ''
