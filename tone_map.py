@@ -76,7 +76,6 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
             'Bb': Bb
         }[tangga_nada]
     tangga_nada = scale(tangga_nada)
-    print(tangga_nada)
     for i in range(len(individu)):
         r_counter = 0
         j = 0
