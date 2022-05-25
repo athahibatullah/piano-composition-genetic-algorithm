@@ -52,42 +52,47 @@ def seleksi_turnamen(fitness_individu_list, peserta_turnamen, jumlah_turnamen):
     
     return hasil_seleksi_list
 
-def mutasi(komposisi, anggota_birama, probabilitas_mutasi, range_nada):
+def mutasi(komposisi, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada):
     operasi = ["+","-"]
     mengubah_nada = [1,2,3,4,5,6]
-    for i in range(len(komposisi)):
-        stop_mutasi = 0
-        while stop_mutasi < int(anggota_birama*probabilitas_mutasi):
-            kena_mutasi = random.randint(0,anggota_birama-1)
-            if komposisi[i][kena_mutasi] != range_nada:
-                pilih_operasi = random.choice(operasi)
-                if pilih_operasi == "+" and komposisi[i][kena_mutasi] + 7 < range_nada:
-                    komposisi[i][kena_mutasi] += 7
-                    stop_mutasi += 1
-                elif komposisi[i][kena_mutasi]-7 > 0:
-                    komposisi[i][kena_mutasi] -= 7
-                    stop_mutasi += 1
-    
-        stop_mutasi = 0
-        while stop_mutasi < int(anggota_birama*probabilitas_mutasi):
-            kena_mutasi = random.randint(0,anggota_birama-1)
-            if komposisi[i][kena_mutasi] != range_nada:
-                pilih_operasi = random.choice(operasi)
-                pilih_mengubah_nada = random.choice(mengubah_nada)
-                if pilih_operasi == "+" and komposisi[i][kena_mutasi] + pilih_mengubah_nada < range_nada:
-                    komposisi[i][kena_mutasi] += pilih_mengubah_nada
-                    stop_mutasi += 1
-                elif komposisi[i][kena_mutasi]-pilih_mengubah_nada > 0:
-                    komposisi[i][kena_mutasi] -= pilih_mengubah_nada
-                    stop_mutasi += 1
-
-        stop_mutasi = 0
-        while stop_mutasi < int(anggota_birama*probabilitas_mutasi):
-            kena_mutasi = random.randint(0,anggota_birama-1)
-            kena_mutasi_sec = random.randint(0,anggota_birama-1)
-            if komposisi[i][kena_mutasi] != range_nada and komposisi[i][kena_mutasi_sec] != range_nada:
-                komposisi[i][kena_mutasi], komposisi[i][kena_mutasi_sec] = komposisi[i][kena_mutasi_sec], komposisi[i][kena_mutasi]
+    # for i in range(len(komposisi)):
+    stop_mutasi = 0
+    # print(int(anggota_birama*probabilitas_mutasi*banyak_birama))
+    while stop_mutasi < int(anggota_birama*probabilitas_mutasi*banyak_birama):
+        kena_mutasi_i = random.randint(0,banyak_birama-1)
+        kena_mutasi_j = random.randint(0,anggota_birama-1)
+        if komposisi[kena_mutasi_i][kena_mutasi_j] != range_nada:
+            pilih_operasi = random.choice(operasi)
+            if pilih_operasi == "+" and komposisi[kena_mutasi_i][kena_mutasi_j] + 7 < range_nada:
+                komposisi[kena_mutasi_i][kena_mutasi_j] += 7
                 stop_mutasi += 1
+            elif komposisi[kena_mutasi_i][kena_mutasi_j]-7 > 0:
+                komposisi[kena_mutasi_i][kena_mutasi_j] -= 7
+                stop_mutasi += 1
+
+    stop_mutasi = 0
+    while stop_mutasi < int(anggota_birama*probabilitas_mutasi*banyak_birama):
+        kena_mutasi_i = random.randint(0,banyak_birama-1)
+        kena_mutasi_j = random.randint(0,anggota_birama-1)
+        if komposisi[kena_mutasi_i][kena_mutasi_j] != range_nada:
+            pilih_operasi = random.choice(operasi)
+            pilih_mengubah_nada = random.choice(mengubah_nada)
+            if pilih_operasi == "+" and komposisi[kena_mutasi_i][kena_mutasi_j] + pilih_mengubah_nada < range_nada:
+                komposisi[kena_mutasi_i][kena_mutasi_j] += pilih_mengubah_nada
+                stop_mutasi += 1
+            elif komposisi[kena_mutasi_i][kena_mutasi_j]-pilih_mengubah_nada > 0:
+                komposisi[kena_mutasi_i][kena_mutasi_j] -= pilih_mengubah_nada
+                stop_mutasi += 1
+
+    stop_mutasi = 0
+    while stop_mutasi < int(anggota_birama*probabilitas_mutasi*banyak_birama):
+        kena_mutasi_i = random.randint(0,banyak_birama-1)
+        kena_mutasi_j = random.randint(0,anggota_birama-1)
+        kena_mutasi_i_sec = random.randint(0,banyak_birama-1)
+        kena_mutasi_j_sec = random.randint(0,anggota_birama-1)
+        if komposisi[kena_mutasi_i][kena_mutasi_j] != range_nada and komposisi[kena_mutasi_i_sec][kena_mutasi_j_sec] != range_nada:
+            komposisi[kena_mutasi_i][kena_mutasi_j], komposisi[kena_mutasi_i_sec][kena_mutasi_j_sec] = komposisi[kena_mutasi_i_sec][kena_mutasi_j_sec], komposisi[kena_mutasi_i][kena_mutasi_j]
+            stop_mutasi += 1
 
 
     return komposisi

@@ -59,7 +59,6 @@ Bb = {
     11: "esu", 12: "fu", 13: "gu", 14: "au", 15: "p" 
     }
 def translate(individu, anggota_birama, range_nada, tangga_nada):
-    translated = []
     def scale(tangga_nada):
         return {
             'C': C,
@@ -76,6 +75,9 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
             'Bb': Bb
         }[tangga_nada]
     tangga_nada = scale(tangga_nada)
+    translated = []
+    translated_string = ''
+    translated_string_list = []
     for i in range(len(individu)):
         r_counter = 0
         j = 0
@@ -102,11 +104,37 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
                     j-=1
                 translated.append(tangga_nada[individu[i][j]])
             j+= 1
-    return translated
+    
+    for i in range(len(translated)):
+        if '1' in translated[i]:
+            temp = str(translated[i]).replace('1', str(2))
+            translated[i] = temp
+        elif '2' in translated[i]:
+            temp = str(translated[i]).replace('2', str(1))
+            translated[i] = temp
+        else:
+            temp = str(translated[i]) + '4'
+            translated[i] = temp
+        translated_string += translated[i] + ' '
+        # if '1' in translated[i][j] or '2' in translated[i][j] and not duration:
+        #     duration = True
+        # elif duration and '1' in translated[i][j]:
+        #     temp = str(translated[i][j]).replace('1','')
+        #     translated[i][j] = temp
+        # elif duration and '2' in translated[i][j]:
+        #     temp = str(translated[i][j]).replace('1','')
+        #     translated[i][j] = temp
+        # elif duration and '1' not in translated[i][j] and translated[i][j] != 'r':
+        #     temp = translated[i][j] + ','
+        #     translated[i][j] = temp
+            #     duration = False
+    translated_string = str(translated_string).replace('u', "'")
+    translated_string = str(translated_string).replace('l', ",")
+    return translated_string
 
-# arr = [[ 8.,  3., 10., 13.,  3.,  1., 10.,  0.,  3.,  6.],
-#        [ 7.,  8.,  6., 12., 11.,  9., 13.,  7., 11.,  7.],
-#        [13.,  3., 14.,  7., 10.,  6.,  3.,  0.,  7.,  8.],
-#        [ 1.,  4., 15.,  15., 12.,  5., 11., 13., 14.,  0.],
-#        [ 3., 14., 11., 15.,  5.,  1.,  7., 13., 14.,  15.]]
-# print(translate(arr, 10, 15))
+# arr = [[ 7.,  3.,  8.,  9.,  4., 13., 11., 12.,  0.,  9.],
+#        [ 0., 10.,  8.,  3.,  5., 13.,  2., 11.,  5.,  1.],
+#        [ 1., 14.,  5.,  8., 10.,  0.,  8., 15., 15.,  4.],
+#        [ 2.,  6.,  9., 15., 14.,  9.,  3.,  7., 14.,  1.],
+#        [ 5.,  0., 12.,  8.,  1.,  8.,  9.,  0., 14.,  8.]]
+# print(translate(arr, 10, 15, 'E'))
