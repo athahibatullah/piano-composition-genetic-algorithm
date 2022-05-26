@@ -9,7 +9,7 @@ import tone_map as tm
 banyak_birama = int(input("Banyak birama: "))
 banyak_individu = int(input("Banyak individu: "))
 probabilitas_mutasi = int(input("Probabilitas mutasi: "))/100
-# banyak_generasi = 100
+banyak_generasi = 100
 range_nada = 14+1
 anggota_birama = 10
 tangga_nada = 'E'
@@ -53,54 +53,72 @@ def hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggo
     
     return total_fitness_list
 
-def update_generasi(populasi_awal, total_fitness_list, banyak_individu):
+def update_generasi(populasi_next, alt_populasi_next, total_fitness_list, banyak_individu):
     fitness_dict = {}
     for i, val in enumerate(total_fitness_list):
         fitness_dict[val] = i
     next_gen_list = []
+    next_gen_list_alt = []
     hasil_seleksi = GA.seleksi_turnamen(total_fitness_list, 3, banyak_individu)
+    
     for val in hasil_seleksi:
-        next_gen_list.append(populasi_awal[fitness_dict[val]])
-    return next_gen_list
+        next_gen_list.append(populasi_next[fitness_dict[val]])
+        next_gen_list_alt.append(alt_populasi_next[fitness_dict[val]])
+    return next_gen_list, next_gen_list_alt
 
-def mutasi_generasi(populasi_awal, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
+def mutasi_generasi(populasi_awal, alt_populasi, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
     individu_mutasi_list = []
+    individu_mutasi_list_alt = []
     for i in range(banyak_individu):
-        individu_mutasi_list.append(GA.mutasi(populasi_awal[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada))
+        individu_mutasi_list.append(GA.mutasi(populasi_awal[i], alt_populasi[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada)[0])
+        individu_mutasi_list_alt.append(GA.mutasi(populasi_awal[i], alt_populasi[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada)[1])
 
-    return individu_mutasi_list
-
-# max_fitness = 0
-# for i in range(banyak_generasi):
-#     populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu)
-#     alt_populasi = populasi_awal[1]
-#     populasi_awal = populasi_awal[0]
-#     # print(populasi_awal)
-#     total_fitness_list = hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu)
-#     if max_fitness < max(total_fitness_list):
-#         max_fitness = max(total_fitness_list)
-#     print("Total fitness: " , max(total_fitness_list))
-#     # print("Hasil Mutasi: ")
-#     # print(mutasi_generasi(populasi_awal, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu))  
-# print(max_fitness)
+    return individu_mutasi_list, individu_mutasi_list_alt
 
 if __name__ == "__main__":
     populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu)
     alt_populasi = populasi_awal[1]
     populasi_awal = populasi_awal[0]
-    print(populasi_awal)
+    # print(populasi_awal, alt_populasi)
+    # print(populasi_awal)
     total_fitness_list = hitung_fitness(populasi_awal, alt_populasi, range_nada, banyak_birama, anggota_birama, banyak_individu)
-    print("Total fitness: " , max(total_fitness_list))
+    # print("Total fitness: " , max(total_fitness_list))
     
     with open('composition.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         for i in range(len(populasi_awal)):
             writer.writerow(populasi_awal[i])
+    
+    # print(update_generasi(populasi_awal, alt_populasi, total_fitness_list, banyak_individu))
+    
+    max_fitness_indiv = 0
+    max_fitness = 0
+    alt_populasi_next = alt_populasi
+    populasi_next = populasi_awal
+    best_fitness_list = []
+    for i in range(banyak_generasi-1):
+        populasi_next = update_generasi(populasi_next, alt_populasi_next, total_fitness_list, banyak_individu)
+        alt_populasi_next = populasi_next[1]
+        populasi_next = populasi_next[0]
+
+        hasil_mutasi = mutasi_generasi(populasi_awal, alt_populasi, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)
+        alt_populasi_next = hasil_mutasi[1]
+        populasi_next = hasil_mutasi[0]
+        total_fitness_list = hitung_fitness(populasi_next, alt_populasi_next, range_nada, banyak_birama, anggota_birama, banyak_individu)
+        best_fitness_list.append(max(total_fitness_list))
+        if max_fitness < max(total_fitness_list):
+            max_fitness = max(total_fitness_list)
+            max_fitness_indiv = populasi_next[total_fitness_list.index(max_fitness)]
+
+    print(best_fitness_list)
+    print(max_fitness)
+    print(max_fitness_indiv)
 
     translated = []
-    for i in range(len(populasi_awal)):
-        translated.append(tm.translate(populasi_awal[i], anggota_birama, range_nada, tangga_nada))
-    print(translated)
+    translated_best = tm.translate(max_fitness_indiv, anggota_birama, range_nada, tangga_nada)
+    for i in range(len(populasi_next)):
+        translated.append(tm.translate(populasi_next[i], anggota_birama, range_nada, tangga_nada))
+    # print(translated)
     def scale(tangga_nada):
         return {
             'C': 'c',
@@ -136,9 +154,19 @@ if __name__ == "__main__":
         f.write(title + content_midi)
         f.close()
 
+    content = "\\fixed c' {\n" + "\key " + tangga_nada + " \major" + "\n" +str(translated_best) + '\n' "}"
+    # print(content)
+    f = open('output/best.ly', 'w')
+    f.write(title + content)
+    f.close()
+
+    content_midi = "\\score {\n" + content + "\n" + "\\midi{ }\n}"
+    # print(content_midi)
+    f = open('output/best_midi.ly', 'w')
+    f.write(title + content_midi)
+    f.close()
+
     # with open('composition_translated.csv', 'w', newline='') as file:
     #     writer = csv.writer(file)
     #     for i in range(len(translated)):
     #         writer.writerow(translated[i])
-print("Hasil Mutasi: ")
-print(mutasi_generasi(populasi_awal, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)) 
