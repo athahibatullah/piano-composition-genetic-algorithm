@@ -40,10 +40,9 @@ Good luck with LilyPond!  Happy engraving.
 https://lilypond.org/introduction.html"
 }
 
-\score { 
-  \fixed c'{
-	\key fis \major
-	fis gis bes b des' es' f' fis'
-  }
-  \midi { }
+\score{ 
+  <<
+   \new Staff \fixed c' { c d e f g a b c' b a g f e d c }
+   \new Staff \fixed c, { \key d \major \clef bass \chordmode { d e:m fis:m g a b:m cis:dim d' cis:dim b:m a g fis:m e:m d } }
+  >>
 }

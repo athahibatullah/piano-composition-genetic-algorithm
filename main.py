@@ -5,6 +5,7 @@ import parameter_fitness as pf
 import fungsi_fitness as ff
 import csv
 import tone_map as tm
+import chord_map as cm
 
 banyak_birama = int(input("Banyak birama: "))
 banyak_individu = int(input("Banyak individu: "))
@@ -116,9 +117,13 @@ if __name__ == "__main__":
 
     translated = []
     translated_best = tm.translate(max_fitness_indiv, anggota_birama, range_nada, tangga_nada)
+    translated_chord = []
+    translated_chord_best = cm.translate(max_fitness_indiv, anggota_birama, range_nada, tangga_nada)
     for i in range(len(populasi_next)):
         translated.append(tm.translate(populasi_next[i], anggota_birama, range_nada, tangga_nada))
-    # print(translated)
+    for i in range(len(populasi_next)):
+        translated_chord.append(cm.translate(populasi_next[i], anggota_birama, range_nada, tangga_nada))
+    print(translated_chord)
     def scale(tangga_nada):
         return {
             'C': 'c',
@@ -142,9 +147,11 @@ if __name__ == "__main__":
             }\n"""
     for i in range(1, banyak_individu+1):
 
-        content = "\\fixed c' {\n" + "\key " + tangga_nada + " \major" + "\n" +str(translated[i-1]) + '\n' "}"
+        # content = "\\fixed c' {\n" + "\key " + tangga_nada + " \major" + "\n" +str(translated[i-1]) + '\n' "}"
+        content = "<<\n \\new Staff \\fixed c' {\n" + "\key " + tangga_nada + " \major" + "\n" +str(translated[i-1]) + '\n' "}\n" + "\\new Staff \\fixed c, {\n" + "\key " + tangga_nada + " \major " + "\clef bass" + " \\chordmode{ \n" + str(translated_chord[i-1]) + "}" +  '\n' "}\n" +">>"
         # print(content)
         f = open('output/test ' + str(i) + '.ly', 'w')
+        # f = open('output/test ' + str(i) + '.txt', 'w')
         f.write(title + content)
         f.close()
 

@@ -29,34 +29,34 @@ A = {
         11: "du", 12: "eu", 13: "fisu", 14: "gisu", 15: "p" 
     }
 B = {
-    0: "r", 1: "bl", 2: "cis", 3: "es", 4: "e", 5: "fis", 
-    6: "gis", 7: "ais", 8: "b", 9: "cisu", 10: "esu", 
-    11: "eu", 12: "fisu", 13: "gisu", 14: "aisu", 15: "p" 
+        0: "r", 1: "bl", 2: "cis", 3: "es", 4: "e", 5: "fis", 
+        6: "gis", 7: "ais", 8: "b", 9: "cisu", 10: "esu", 
+        11: "eu", 12: "fisu", 13: "gisu", 14: "aisu", 15: "p" 
     }
 Db = {
-    0: "r", 1: "des", 2: "es", 3: "f", 4: "fis", 5: "as", 
-    6: "bes", 7: "cu", 8: "desu", 9: "esu", 10: "fu", 
-    11: "fisu", 12: "asu", 13: "besu", 14: "cuu", 15: "p" 
+        0: "r", 1: "des", 2: "es", 3: "f", 4: "fis", 5: "as", 
+        6: "bes", 7: "cu", 8: "desu", 9: "esu", 10: "fu", 
+        11: "fisu", 12: "asu", 13: "besu", 14: "cuu", 15: "p" 
     }
 Eb = {
-    0: "r", 1: "es", 2: "f", 3: "g", 4: "as", 5: "bes", 
-    6: "cu", 7: "du", 8: "esu", 9: "fu", 10: "gu", 
-    11: "asu", 12: "besu", 13: "cuu", 14: "duu", 15: "p" 
+        0: "r", 1: "es", 2: "f", 3: "g", 4: "as", 5: "bes", 
+        6: "cu", 7: "du", 8: "esu", 9: "fu", 10: "gu", 
+        11: "asu", 12: "besu", 13: "cuu", 14: "duu", 15: "p" 
     }
 Fs = {
-    0: "r", 1: "fis", 2: "gis", 3: "bes", 4: "b", 5: "desu", 
-    6: "esu", 7: "fu", 8: "fisu", 9: "gisu", 10: "besu", 
-    11: "bu", 12: "desuu", 13: "esuu", 14: "fuu", 15: "p" 
+        0: "r", 1: "fis", 2: "gis", 3: "bes", 4: "b", 5: "desu", 
+        6: "esu", 7: "fu", 8: "fisu", 9: "gisu", 10: "besu", 
+        11: "bu", 12: "desuu", 13: "esuu", 14: "fuu", 15: "p" 
     }
 Ab = {
-    0: "r", 1: "asl", 2: "besl", 3: "c", 4: "des", 5: "es", 
-    6: "f", 7: "g", 8: "as", 9: "bes", 10: "cu", 
-    11: "desu", 12: "esu", 13: "fu", 14: "gu", 15: "p" 
+        0: "r", 1: "asl", 2: "besl", 3: "c", 4: "des", 5: "es", 
+        6: "f", 7: "g", 8: "as", 9: "bes", 10: "cu", 
+        11: "desu", 12: "esu", 13: "fu", 14: "gu", 15: "p" 
     }
 Bb = {
-    0: "r", 1: "besl", 2: "c", 3: "d", 4: "es", 5: "f", 
-    6: "g", 7: "a", 8: "bes", 9: "cu", 10: "du", 
-    11: "esu", 12: "fu", 13: "gu", 14: "au", 15: "p" 
+        0: "r", 1: "besl", 2: "c", 3: "d", 4: "es", 5: "f", 
+        6: "g", 7: "a", 8: "bes", 9: "cu", 10: "du", 
+        11: "esu", 12: "fu", 13: "gu", 14: "au", 15: "p" 
     }
 def translate(individu, anggota_birama, range_nada, tangga_nada):
     def scale(tangga_nada):
@@ -77,24 +77,25 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
     tangga_nada = scale(tangga_nada)
     translated = []
     translated_string = ''
-    translated_string_list = []
     for i in range(len(individu)):
-        r_counter = 0
+        # r_counter = 0
         j = 0
         p_counter = 0
         while j < anggota_birama:
-            if individu[i][j] == 0:
-                while j < anggota_birama and individu[i][j] == 0:
-                    r_counter+=1
-                    j+=1
-                if r_counter == 1:
-                    translated.append("r")
-                else:
-                    translated.append("r" + str(r_counter))
-                r_counter = 0
-            elif individu[i][j] == range_nada:
-                p = individu[i][j-1]
-                while j < anggota_birama and individu[i][j] == range_nada:
+            # if individu[i][j] == 0:
+            #     while j < anggota_birama and individu[i][j] == 0:
+            #         r_counter+=1
+            #         j+=1
+            #     if r_counter == 1:
+            #         translated.append("r"+ ' ' + str(individu[i][j]))
+            #         j-=1
+            #     else:
+            #         translated.append("r" + str(r_counter)+ ' ' + str(individu[i][j]))
+            #         j-=r_counter
+            #     r_counter = 0
+            if j != anggota_birama-1 and individu[i][j+1] == range_nada:
+                p = individu[i][j]
+                while j < anggota_birama-1 and individu[i][j+1] == range_nada:
                     p_counter+=1
                     j+=1
                 translated.append(tangga_nada[p] + str(p_counter))
@@ -137,4 +138,6 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
 #        [ 1., 14.,  5.,  8., 10.,  0.,  8., 15., 15.,  4.],
 #        [ 2.,  6.,  9., 15., 14.,  9.,  3.,  7., 14.,  1.],
 #        [ 5.,  0., 12.,  8.,  1.,  8.,  9.,  0., 14.,  8.]]
-# print(translate(arr, 10, 15, 'E'))
+# arr = [[0,15,15,15,15],
+#         [1,1,15,15,15]]
+# print(translate(arr, 10, 15, 'C'))
