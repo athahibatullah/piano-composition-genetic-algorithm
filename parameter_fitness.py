@@ -38,7 +38,14 @@ def arah_kontur(komposisi, anggota_birama):
     return arah_kontur_naik_list/interval_sum
 
 def stabilitas_kontur(komposisi, anggota_birama):
+    range_nada = 15
     stabilitas_kontur_list = []
+
+    for i in range(len(komposisi)):
+        for j in range(anggota_birama-1):
+            if j != anggota_birama and komposisi[i][j+1] == range_nada:
+                komposisi[i][j+1] = komposisi[i][j]
+
     for i in range(len(komposisi)):
         interval_list = []
         stabilitas_kontur_count = 0
@@ -48,9 +55,8 @@ def stabilitas_kontur(komposisi, anggota_birama):
         for k in range(len(interval_list)-1):
             if interval_list[k] == 0 and interval_list[k+1] == 0:
                 stabilitas_kontur_count += 1
-        stabilitas_kontur_list.append(stabilitas_kontur_count/len(interval_list))
+        stabilitas_kontur_list.append(stabilitas_kontur_count/(len(interval_list)-1))
     return stabilitas_kontur_list
-            
 def variasi_irama(komposisi, anggota_birama, range_nada):
     variasi_irama_list = []
     for i in range(len(komposisi)):
