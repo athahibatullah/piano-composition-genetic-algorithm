@@ -39,6 +39,51 @@ def inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi):
 
     return komposisi
 
+def inisialisasi_bass(banyak_birama, anggota_birama, range_nada, komposisi):
+    for i in range(banyak_birama):
+        randnums = []
+        random_number =  random.randint(0,range_nada-1)
+        for j in range(anggota_birama):
+            randnums.append(random_number)
+    # for i in range(banyak_birama):
+    #     randnums = []
+    #     sama = -1
+    #     for j in range(anggota_birama):
+    #         num = random.randint(0,range_nada-1)
+    #         if j == 0:
+    #             randnums.append(num)
+    #         elif randnums[j-1] == num:
+    #             randnums.append(range_nada)
+    #             sama = num
+    #         elif num == sama:
+    #             randnums.append(range_nada)
+    #         elif num != sama:
+    #             randnums.append(num)
+    #             sama = -1
+    #         else:
+    #             randnums.append(num)
+        # quota = 15
+        # while quota > 0:
+        #     if quota == 15:
+        #         num = random.randint(0,14)
+        #     else:
+        #         num = random.randint(0,15)
+
+        #     if num == 15:
+        #         banyak_random = random.randint(1,quota) 
+        #         for j in range(banyak_random):
+        #             randnums.append(15)
+        #         quota -= banyak_random
+        #     else:
+        #         randnums.append(num)
+        #         quota -= 1
+        komposisi[i] = np.array(randnums)
+
+    return komposisi
+
+komposisi = np.empty((5,10))
+print(inisialisasi_bass(5,10,15,komposisi))
+
 def seleksi_turnamen(fitness_individu_list, peserta_turnamen, jumlah_turnamen):
     hasil_seleksi_list = []
     for i in range(jumlah_turnamen):

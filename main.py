@@ -15,14 +15,18 @@ range_nada = 14+1
 anggota_birama = 10
 tangga_nada = 'E'
 komposisi = np.empty((banyak_birama,anggota_birama))
+# komposisi_bass = np.empty((banyak_birama,anggota_birama))
 
 def generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi, banyak_individu):
     komposisi_individu_list = []
+    # komposisi_bass_list = []
     for i in range(banyak_individu):
         populasi_awal = GA.inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi)
-        populasi_awal = populasi_awal
+        # populasi_awal_bass = GA.inisialisasi_bass(banyak_birama, anggota_birama, range_nada, komposisi)
         komposisi_individu_list.append(populasi_awal)
+        # komposisi_bass_list.append(populasi_awal_bass)
         komposisi = np.empty((banyak_birama,anggota_birama))
+        # komposisi_bass = np.empty((banyak_birama,anggota_birama))
     return komposisi_individu_list
 
 def hitung_fitness(populasi_awal, range_nada, banyak_birama, anggota_birama):
