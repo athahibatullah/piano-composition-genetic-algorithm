@@ -22,7 +22,7 @@ def generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi_trebl
     komposisi_bass_list = []
     for i in range(banyak_individu):
         populasi_awal_treble = GA.inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi_treble)
-        populasi_awal_bass = GA.inisialisasi_bass(1, anggota_birama, range_nada, komposisi_bass)
+        populasi_awal_bass = GA.inisialisasi_bass(1, anggota_birama+1, range_nada, komposisi_bass)
         komposisi_treble_list.append(populasi_awal_treble)
         komposisi_bass_list.append(populasi_awal_bass)
         komposisi_treble = np.empty((banyak_birama, anggota_birama))
@@ -89,21 +89,20 @@ def update_generasi(populasi_next, total_fitness_list, banyak_individu):
         next_gen_list.append(populasi_next[fitness_dict[val]])
     return next_gen_list
 
-def mutasi_generasi(populasi_awal, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
-    individu_mutasi_list = []
+def mutasi_generasi(populasi_treble, populasi_bass, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
+    treble_mutasi_list = []
+    bass_mutasi_list = []
     for i in range(banyak_individu):
-        individu_mutasi_list.append(GA.mutasi(populasi_awal[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada))
-
-    return individu_mutasi_list
+        treble_mutasi_list.append(GA.mutasi(populasi_treble[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada))
+        bass_mutasi_list.append(GA.mutasi_bass(populasi_bass[i], 1, anggota_birama+1, probabilitas_mutasi, range_nada))
+    return treble_mutasi_list, bass_mutasi_list
 
 if __name__ == "__main__":
     populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi_treble, komposisi_bass, banyak_individu)
     populasi_awal_treble = populasi_awal[0]
     populasi_awal_bass = populasi_awal[1]
-    # print(populasi_awal_treble)
-    # print(populasi_awal_bass)
     total_fitness_treble_list = hitung_fitness(populasi_awal_treble, range_nada, banyak_birama, anggota_birama)
-    total_fitness_bass_list = hitung_fitness_bass(populasi_awal_bass, range_nada, anggota_birama)
+    total_fitness_bass_list = hitung_fitness_bass(populasi_awal_bass, range_nada, anggota_birama+1)
     # print("Total fitness: " , max(total_fitness_list))
     # with open('composition.csv', 'w', newline='') as file:
     #     writer = csv.writer(file)
@@ -118,8 +117,9 @@ if __name__ == "__main__":
     for i in range(banyak_generasi-1):
         populasi_next_treble = update_generasi(populasi_next_treble, total_fitness_treble_list, banyak_individu)
         populasi_next_bass = update_generasi(populasi_next_bass, total_fitness_bass_list, banyak_individu)
-        hasil_mutasi_treble = mutasi_generasi(populasi_next_treble, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)
-        hasil_mutasi_bass = mutasi_generasi(populasi_next_bass, 1, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)
+        hasil_mutasi = mutasi_generasi(populasi_next_treble, populasi_next_bass, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)
+        hasil_mutasi_treble = hasil_mutasi[0]
+        hasil_mutasi_bass = hasil_mutasi[1]
         populasi_next_treble = hasil_mutasi_treble
         populasi_next_bass = hasil_mutasi_bass
 
@@ -134,6 +134,8 @@ if __name__ == "__main__":
     # print(best_fitness_list)
     # print(max_fitness)
     # print(max_fitness_indiv)
+    print(populasi_next_treble)
+    print(populasi_next_bass)
 
     translated = []
     translated_best = tm.translate(max_fitness_indiv, anggota_birama, range_nada, tangga_nada)
@@ -144,7 +146,7 @@ if __name__ == "__main__":
     temp_translated= []
     for i in range(len(populasi_next_bass)):
         temp_individu = []
-        for j in range(anggota_birama):
+        for j in range(anggota_birama+1):
             temp_birama = []
             for k in range(anggota_birama):
                 temp_birama.append(populasi_next_bass[i][j])
