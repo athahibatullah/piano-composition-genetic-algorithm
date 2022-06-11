@@ -77,30 +77,36 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
             'Bb': Bb
         }[tangga_nada]
     tangga_nada = scale(tangga_nada)
-    translated = []
     translated_string = ''
-
     for i in range(len(individu)):
-        j = 0
-        p_counter = 0
-        while j < anggota_birama:
-            if j != anggota_birama-1 and individu[i][j+1] == range_nada:
-                p = individu[i][j]
-                while j < anggota_birama-1 and individu[i][j+1] == range_nada:
-                    p_counter+=1
-                    j+=1
-                if ':' in tangga_nada[p]:
-                    chord_split = (tangga_nada[p].split(':'))[0]
-                    modifier_split = (tangga_nada[p].split(':'))[1]
-                    translated.append(chord_split + str(p_counter) + ':' + modifier_split)
-                else:
-                    translated.append(tangga_nada[p] + str(p_counter))
-                p_counter = 0
-            else:
-                if j >= anggota_birama:
-                    j-=1
-                translated.append(tangga_nada[individu[i][j]])
-            j+= 1
+        for j in range(anggota_birama):
+            translated_string += tangga_nada[individu[i][j]] + ' '
+
+    # for i in range(len(individu)):
+    #     j = 0
+    #     p_counter = 0
+    #     while j < anggota_birama:
+    #         if j != anggota_birama-1 and individu[i][j+1] == range_nada:
+    #             p = individu[i][j]
+    #             while j < anggota_birama-1 and individu[i][j+1] == range_nada:
+    #                 p_counter+=1
+    #                 j+=1
+    #             if ':' in tangga_nada[p]:
+    #                 chord_split = (tangga_nada[p].split(':'))[0]
+    #                 modifier_split = (tangga_nada[p].split(':'))[1]
+    #                 translated.append(chord_split + str(p_counter) + ':' + modifier_split)
+    #             else:
+    #                 translated.append(tangga_nada[p] + str(p_counter))
+    #             p_counter = 0
+    #         else:
+    #             if j >= anggota_birama:
+    #                 j-=1
+    #             translated.append(tangga_nada[individu[i][j]])
+    #         j+= 1
+    # print(individu)
+    # for i in range(len(individu)):
+    #     for j in range(anggota_birama):
+    #         translated.append(tangga_nada[individu[i][j]])
             # elif individu[i][j] == range_nada:
             #     p = individu[i][j-1]
             #     while j < anggota_birama and individu[i][j] == range_nada:
@@ -118,35 +124,37 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
             #         j-=1
             #     translated.append(tangga_nada[individu[i][j]])
             # j+= 1
-    for i in range(len(translated)):
-        if '1' in translated[i]:
-            temp = str(translated[i]).replace('1', str(2))
-            translated[i] = temp
-        elif '2' in translated[i]:
-            temp = str(translated[i]).replace('2', str(1))
-            translated[i] = temp
-        else:
-            if ':' in translated[i]:
-                chord_split = (translated[i].split(':'))[0]
-                modifier_split = (translated[i].split(':'))[1]
-                temp = str(chord_split) + '4' + ':' + modifier_split
-                translated[i] = temp
-            else:
-                temp = str(translated[i]) + '4' 
-                translated[i] = temp
-        translated_string += translated[i] + ' '
-        # if '1' in translated[i][j] or '2' in translated[i][j] and not duration:
-        #     duration = True
-        # elif duration and '1' in translated[i][j]:
-        #     temp = str(translated[i][j]).replace('1','')
-        #     translated[i][j] = temp
-        # elif duration and '2' in translated[i][j]:
-        #     temp = str(translated[i][j]).replace('1','')
-        #     translated[i][j] = temp
-        # elif duration and '1' not in translated[i][j] and translated[i][j] != 'r':
-        #     temp = translated[i][j] + ','
-        #     translated[i][j] = temp
-            #     duration = False
+    
+
+    # for i in range(len(translated)):
+    #     if '1' in translated[i]:
+    #         temp = str(translated[i]).replace('1', str(2))
+    #         translated[i] = temp
+    #     elif '2' in translated[i]:
+    #         temp = str(translated[i]).replace('2', str(1))
+    #         translated[i] = temp
+    #     else:
+    #         if ':' in translated[i]:
+    #             chord_split = (translated[i].split(':'))[0]
+    #             modifier_split = (translated[i].split(':'))[1]
+    #             temp = str(chord_split) + '4' + ':' + modifier_split
+    #             translated[i] = temp
+    #         else:
+    #             temp = str(translated[i]) + '4' 
+    #             translated[i] = temp
+    #     translated_string += translated[i] + ' '
+    #     # if '1' in translated[i][j] or '2' in translated[i][j] and not duration:
+    #     #     duration = True
+    #     # elif duration and '1' in translated[i][j]:
+    #     #     temp = str(translated[i][j]).replace('1','')
+    #     #     translated[i][j] = temp
+    #     # elif duration and '2' in translated[i][j]:
+    #     #     temp = str(translated[i][j]).replace('1','')
+    #     #     translated[i][j] = temp
+    #     # elif duration and '1' not in translated[i][j] and translated[i][j] != 'r':
+    #     #     temp = translated[i][j] + ','
+    #     #     translated[i][j] = temp
+    #         #     duration = False
     translated_string = str(translated_string).replace('u', "'")
     translated_string = str(translated_string).replace('l', ",")
     return translated_string

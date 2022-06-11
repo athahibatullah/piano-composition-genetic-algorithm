@@ -17,6 +17,14 @@ def interval_sum(komposisi, anggota_birama):
         interval_sum_list.append(interval)
     return np.array(interval_sum_list)
 
+def interval_sum_bass(komposisi, anggota_birama):
+    interval_sum_list = []
+    interval = 0
+    for i in range(anggota_birama-1):
+        interval += abs(komposisi[i] - komposisi[i+1])
+    interval_sum_list.append(interval)
+    return np.array(interval_sum_list)
+
 def mean_interval_birama(interval_sum_list, anggota_birama):
     mean_interval_list = []
     for i in range(len(interval_sum_list)):
