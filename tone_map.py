@@ -58,7 +58,7 @@ Bb = {
         6: "g", 7: "a", 8: "bes", 9: "cu", 10: "du", 
         11: "esu", 12: "fu", 13: "gu", 14: "au", 15: "p" 
     }
-def translate(individu, anggota_birama, range_nada, tangga_nada):
+def translate(individu, banyak_birama, anggota_birama, range_nada, tangga_nada):
     def scale(tangga_nada):
         return {
             'C': C,
@@ -77,7 +77,7 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
     tangga_nada = scale(tangga_nada)
     translated = []
     translated_string = ''
-    for i in range(len(individu)):
+    for i in range(banyak_birama):
         # r_counter = 0
         j = 0
         p_counter = 0
@@ -93,27 +93,36 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
             #         translated.append("r" + str(r_counter)+ ' ' + str(individu[i][j]))
             #         j-=r_counter
             #     r_counter = 0
-            if j != anggota_birama-1 and individu[i][j+1] == range_nada:
-                p = individu[i][j]
-                while j < anggota_birama-1 and individu[i][j+1] == range_nada:
-                    p_counter+=1
-                    j+=1
-                translated.append(tangga_nada[p] + str(p_counter))
-                p_counter = 0
-            else:
-                if j >= anggota_birama:
-                    j-=1
-                translated.append(tangga_nada[individu[i][j]])
-            j+= 1
+            if isinstance(individu[i][j],list):
+                if len(individu[i][j]) == 2:
+                    for k in range(2):
+                        translated.append(tangga_nada[individu[i][j][k]]+ '8')
+                elif len(individu[i][j]) == 4:
+                    for k in range(4):
+                        translated.append(tangga_nada[individu[i][j][k]] + '16')
+                j+= 1
+            else:    
+                if j != anggota_birama-1 and individu[i][j+1] == range_nada:
+                    p = individu[i][j]
+                    while j < anggota_birama-1 and individu[i][j+1] == range_nada:
+                        p_counter+=1
+                        j+=1
+                    translated.append(tangga_nada[p] + str(p_counter))
+                    p_counter = 0
+                else:
+                    if j >= anggota_birama:
+                        j-=1
+                    translated.append(tangga_nada[individu[i][j]])
+                j+= 1
     
     for i in range(len(translated)):
-        if '1' in translated[i]:
+        if '1' in translated[i] and '16' not in translated[i]:
             temp = str(translated[i]).replace('1', str(2))
             translated[i] = temp
         elif '2' in translated[i]:
             temp = str(translated[i]).replace('2', str(1))
             translated[i] = temp
-        else:
+        elif '8' not in translated[i] and '16' not in translated[i]:
             temp = str(translated[i]) + '4'
             translated[i] = temp
         translated_string += translated[i] + ' '
@@ -133,11 +142,11 @@ def translate(individu, anggota_birama, range_nada, tangga_nada):
     translated_string = str(translated_string).replace('l', ",")
     return translated_string
 
-# arr = [[ 7.,  3.,  8.,  9.,  4., 13., 11., 12.,  0.,  9.],
-#        [ 0., 10.,  8.,  3.,  5., 13.,  2., 11.,  5.,  1.],
-#        [ 1., 14.,  5.,  8., 10.,  0.,  8., 15., 15.,  4.],
-#        [ 2.,  6.,  9., 15., 14.,  9.,  3.,  7., 14.,  1.],
-#        [ 5.,  0., 12.,  8.,  1.,  8.,  9.,  0., 14.,  8.]]
+# arr = [[3, 9, 2, 10], [0, 12, 4, 6], [5, 5, 13, 12], [7, 1, [0, 10], 1], [5, [6, 11, 7, 4], 11, 3]]
+# arr2 = [[13, 10, 6, 7], [[8, 0, 7, 5], [13, 3, 9, 0], [3, 2], [9, 5, 10, 0]], [[10, 0, 8, 12], 9, 12, 14], [11, 2, 13, 13], [7, [9, 10, 4, 2], 3, [1,2]]]
+# arr3 = [[10, [2, 10, 3, 6], 6, 13], [8, 6, 7, [13, 1]], [10, [0, 12], 7, 15], [2, 15, 15, [8, 0, 5, 3]], [4, 0, [8, 5, 10, 11], 5]]
+# arr4 = [[1, [8, 3], 10, 8], [9, 2, 7, 7], [4, 9, 6, 12], [4, [8, 11], 3, 3], [0, 4, 3, 4]]
+
 # arr = [[0,15,15,15,15],
 #         [1,1,15,15,15]]
-# print(translate(arr, 10, 15, 'C'))
+# print(translate(arr4, 5, 4, 15, 'C'))

@@ -1,6 +1,3 @@
-from numpy import nanmax
-
-
 def variasi_nada(komposisi, range_nada, banyak_birama, anggota_birama):
     variasi_nada_list = []
     for i in range(banyak_birama):
