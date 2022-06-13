@@ -4,9 +4,9 @@ def variasi_nada(komposisi, range_nada):
         if j in komposisi:
             banyak_nada_digunakan += 1
 
-    return banyak_nada_digunakan/range_nada
+    return banyak_nada_digunakan/(range_nada-1)
 
-def interval_disonan(komposisi, anggota_birama, range_nada):
+def interval_disonan(komposisi, banyak_birama, anggota_birama, range_nada):
     interval_list = {0: [0,1,2,3,4,5,7,8,9,12], 0.5: 10, 1: [6,11,13]}
     sum_interval_disonan = 0
     for i in range(anggota_birama-1):
@@ -16,7 +16,7 @@ def interval_disonan(komposisi, anggota_birama, range_nada):
         elif interval == interval_list[0.5]:
             sum_interval_disonan += 0.5
 
-    return sum_interval_disonan/range_nada
+    return sum_interval_disonan/(range_nada-2)
 
 def arah_kontur(komposisi, anggota_birama):
     interval_sum = 0
@@ -28,9 +28,7 @@ def arah_kontur(komposisi, anggota_birama):
             arah_kontur_sum += abs(interval)
     return arah_kontur_sum/interval_sum
 
-def stabilitas_kontur(komposisi, anggota_birama):
-    range_nada = 15
-
+def stabilitas_kontur(komposisi, anggota_birama, range_nada):
     for i in range(anggota_birama-1):
         if i != anggota_birama and komposisi[i+1] == range_nada:
             komposisi[i+1] = komposisi[i]
@@ -44,20 +42,37 @@ def stabilitas_kontur(komposisi, anggota_birama):
         if interval_list[k] == 0 and interval_list[k+1] == 0:
             stabilitas_kontur_count += 1
     return stabilitas_kontur_count/(len(interval_list)-1)
-def variasi_irama(komposisi, anggota_birama, range_nada):
-    variasi_irama_rekor = 1
-    for i in range(anggota_birama-1):
-        variasi_irama_counter = 0
-        if komposisi[i] == range_nada and i < anggota_birama-1:
-            while komposisi[i] == range_nada and i < anggota_birama-1:
-                variasi_irama_counter += 1
-                if variasi_irama_counter > variasi_irama_rekor:
-                    variasi_irama_rekor += 1
-                i+=1
-    return variasi_irama_rekor/16
 
-def rentang_irama(komposisi, anggota_birama, range_nada, durasi_minimal=1):
-    rentang_irama = variasi_irama(komposisi, anggota_birama, range_nada)
-    rentang_irama = rentang_irama*16
-    rentang_irama_list = (rentang_irama/durasi_minimal)/16 
-    return rentang_irama_list
+def hitung_durasi(komposisi, anggota_birama, range_nada):
+    min_durasi = 1
+    max_durasi = 1
+    durasi_list = [1]
+    print(komposisi)
+    for i in range(anggota_birama):
+        if komposisi[i] == range_nada:
+            if i != anggota_birama-1 and komposisi[i] == range_nada:
+                max_durasi = 4
+            elif max_durasi < 4:
+                max_durasi = 2
+            if max_durasi not in durasi_list:
+                durasi_list.append(max_durasi)
+    return min_durasi, max_durasi, durasi_list
+
+def variasi_irama(komposisi, banyak_birama, anggota_birama, range_nada):
+    # variasi_irama_list = []
+    # for i in range(banyak_birama):
+    #     banyak_durasi_beda = len(hitung_durasi(komposisi[i], anggota_birama, range_nada)[2])
+    #     variasi_irama_list.append(banyak_durasi_beda/16)
+    # variasi_irama_list.append(0/16)
+    return 0/16
+
+def rentang_irama(komposisi, banyak_birama, anggota_birama, range_nada):
+    min_durasi = 1
+    max_durasi = 1
+    # for i in range(banyak_birama):
+    #     durasi = pf.hitung_durasi(komposisi[i], anggota_birama, range_nada)
+    #     min_durasi = durasi[0]
+    #     max_durasi = durasi[1]
+        # rentang_irama_list.append((max_durasi/min_durasi)/16)
+    # rentang_irama_list.append((max_durasi/min_durasi)/16)
+    return (max_durasi/min_durasi)/16
