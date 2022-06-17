@@ -88,15 +88,7 @@ def stabilitas_kontur(komposisi, banyak_birama, anggota_birama, range_nada):
                 stabilitas_kontur_count += 1
         stabilitas_kontur_list.append(stabilitas_kontur_count/(len(interval)-1))
     return stabilitas_kontur_list
-# arr = [[3, 9, 2, 10], [0, 12, 4, 6], [5, 5, 13, 12], [7, 1, [0, 10], 1], [5, [6, 11, 7, 4], 11, 3]]
-# arr2 = [[13, 10, 6, 7], [[8, 0, 7, 5], [13, 3, 9, 0], [3, 2], [9, 5, 10, 0]], [[10, 0, 8, 12], 9, 12, 14], [11, 2, 13, 13], [7, [9, 10, 4, 2], 3, [1,2]]]
-# arr3 = [[10, [2, 10, 3, 6], 6, 13], [8, 6, 7, [13, 1]], [10, [0, 12], 7, 15], [2, 15, 15, [8, 0, 5, 3]], [4, 0, [8, 5, 10, 11], 5]]
-# arr4 = [[1, [8, 3], 10, 8], [9, 2, 7, 7], [4, 9, 6, 12], [4, [8, 11], 3, 3], [0, 4, 3, 4]]
-# print(stabilitas_kontur(arr2,5,4,15))
-# # print(interval_disonan(arr2,5,4,15))
-# # print(arah_kontur(arr2, 5, 4, 15))
-# print(rentang_irama(arr2,5,4,15))
-# print(stabilitas_kontur(arr,5,4,15))
+
 def hitung_durasi(komposisi, anggota_birama, range_nada):
     min_durasi = 1
     max_durasi = 1
@@ -126,6 +118,7 @@ def variasi_irama(komposisi, banyak_birama, anggota_birama, range_nada):
         variasi_irama_list.append(banyak_durasi_beda/16)
     return variasi_irama_list
 
+
 def rentang_irama(komposisi, banyak_birama, anggota_birama, range_nada):
     rentang_irama_list = []
     for i in range(banyak_birama):
@@ -134,3 +127,17 @@ def rentang_irama(komposisi, banyak_birama, anggota_birama, range_nada):
         max_durasi = durasi[1]
         rentang_irama_list.append((max_durasi/min_durasi)/16)
     return rentang_irama_list
+
+arr = [[3, 9, 2, 10], [0, 12, 4, 6], [5, 15, 13, 12], [7, 1, [0, 10], 1], [5, [6, 11, 7, 4], 11, 3]]
+# arr2 = [[13, 10, 6, 7], [[8, 0, 7, 5], [13, 3, 9, 0], [3, 2], [9, 5, 10, 0]], [[10, 0, 8, 12], 9, 12, 14], [11, 2, 13, 13], [7, [9, 10, 4, 2], 3, [1,2]]]
+# arr3 = [[10, [2, 10, 3, 6], 6, 13], [8, 6, 7, [13, 1]], [10, [0, 12], 7, 15], [2, 15, 15, [8, 0, 5, 3]], [4, 0, [8, 5, 10, 11], 5]]
+# arr4 = [[1, [8, 3], 10, 8], [9, 2, 7, 7], [4, 9, 6, 12], [4, [8, 11], 3, 3], [0, 4, 3, 4]]
+# print(variasi_nada(arr,15,5,4))
+# print(stabilitas_kontur(arr,5,4,15))
+# print(interval_disonan(arr,5,4,15))
+# print(arah_kontur(arr, 5, 4, 15))
+# print(rentang_irama(arr2,5,4,15))
+# print(stabilitas_kontur(arr,5,4,15))
+
+# print(variasi_irama(arr,5,4,15))
+# print(rentang_irama(arr,5,4,15))

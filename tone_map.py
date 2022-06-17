@@ -149,4 +149,4 @@ def translate(individu, banyak_birama, anggota_birama, range_nada, tangga_nada):
 
 # arr = [[0,15,15,15,15],
 #         [1,1,15,15,15]]
-# print(translate(arr4, 5, 4, 15, 'C'))
+# print(translate(arr3, 5, 4, 15, 'C'))
