@@ -31,10 +31,9 @@ def inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi):
 
 # print(inisialisasi_individu(5,4,15,[]))
 
-def inisialisasi_bass(banyak_birama, anggota_birama, range_nada, komposisi):
+def inisialisasi_bass(jumlah_individu, komposisi):
     randnums= []
-    for i in range(anggota_birama):
-        # random_number =  random.randint(1,range_nada-2)
+    for i in range(jumlah_individu):
         random_number =  random.randint(1,8)
         randnums.append(random_number)
     komposisi = randnums

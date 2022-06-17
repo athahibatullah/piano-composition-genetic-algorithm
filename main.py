@@ -6,11 +6,12 @@ import fungsi_fitness as ff
 import csv
 import tone_map as tm
 import chord_map as cm
+import generate_report as gp
 
 banyak_birama = int(input("Banyak birama: "))
 banyak_individu = int(input("Banyak individu: "))
 probabilitas_mutasi = int(input("Probabilitas mutasi: "))/100
-banyak_generasi = 10
+banyak_generasi = 100
 range_nada = 14+1
 anggota_birama = 4
 tangga_nada = 'C'
@@ -23,7 +24,7 @@ def generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi_trebl
     komposisi_bass_list = []
     for i in range(banyak_individu):
         populasi_awal_treble = GA.inisialisasi_individu(banyak_birama, anggota_birama, range_nada, komposisi_treble)
-        populasi_awal_bass = GA.inisialisasi_bass(1, anggota_birama+1, range_nada, komposisi_bass)
+        populasi_awal_bass = GA.inisialisasi_bass(banyak_birama, komposisi_bass)
         komposisi_treble_list.append(populasi_awal_treble)
         komposisi_bass_list.append(populasi_awal_bass)
         komposisi_treble = []
@@ -92,53 +93,31 @@ def update_generasi(populasi_next, total_fitness_list, banyak_individu):
 def mutasi_generasi(populasi_treble, populasi_bass, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu):
     treble_mutasi_list = []
     bass_mutasi_list = []
-    # print(populasi_treble)
-    # print('')
-    # print(populasi_treble[0])
-    # print(populasi_treble[1])
-    # print('================')
     for i in range(banyak_individu):
-        # print("Mutated bfeore:", treble_mutasi_list, "\n")
-        mutated = GA.mutasi(populasi_treble[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada)
-        # print("MUtated:",mutated)
-        # print("TReble before:",treble_mutasi_list, "\n")
-        # treble_mutasi_list.append(GA.mutasi(i, populasi_treble[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada))
-        treble_mutasi_list.append(mutated)
-        bass_mutasi_list.append(GA.mutasi_bass(populasi_bass[i], 1, anggota_birama+1, probabilitas_mutasi, 8))
-        # print("TReble:",treble_mutasi_list)
-        mutated = 0
+        treble_mutasi_list.append(GA.mutasi(populasi_treble[i], banyak_birama, anggota_birama, probabilitas_mutasi, range_nada))
+        bass_mutasi_list.append(GA.mutasi_bass(populasi_bass[i], 1, banyak_birama, probabilitas_mutasi, 8))
     return treble_mutasi_list, bass_mutasi_list
-
-# arr = [[[1, 7, 0, [12, 9, 10, 6]], [2, 13, 3, 15], [14, 9, 7, 12], [1, 4, 14, 5], [[10, 0], 12, 9, 2]], [[13, 7, 13, 12], [12, 15, 2, 0], [14, 15, 11, 12], [[6, 13], 10, 1, 13], [14, 9, 7, 13]], [[[9, 8, 13, 4], 14, 12, [2, 4]], [5, 8, 12, 3], [10, 11, 5, 11], [7, [1, 7], 6, 2], [14, 11, 3, 11]], [[4, 14, 1, 12], [2, 11, 8, 4], [6, 7, 14, 2], [3, 14, 10, 7], [0, 3, 11, 2]], [[9, [9, 13], 3, 9], [14, 1, 11, 2], [3, 15, 5, 11], [8, 2, 6, 8], [10, 6, 9, 12]]]
-# arr2 = [[4, 4, 6, 3, 7], [6, 8, 5, 8, 2], [5, 2, 3, 7, 5], [5, 8, 5, 7, 3], [8, 3, 6, 5, 8]]
-# for i in range(100):
-#     mutated = mutasi_generasi(arr, arr2, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, 2)
-#     print(mutated)
-#     print(len(mutated[0][1][1]))
-#     print("")
 
 if __name__ == "__main__":
     populasi_awal = generate_populasi(banyak_birama, anggota_birama, range_nada, komposisi_treble, komposisi_bass, banyak_individu)
     populasi_awal_treble = populasi_awal[0]
     populasi_awal_bass = populasi_awal[1]
-    # print(populasi_awal_treble)
-    # print(populasi_awal_bass)
+
     total_fitness_treble_list = hitung_fitness(populasi_awal_treble, range_nada, banyak_birama, anggota_birama)
     total_fitness_bass_list = hitung_fitness_bass(populasi_awal_bass, range_nada, anggota_birama+1)
-    # print("Total fitness: " , max(total_fitness_list))
-    # with open('composition.csv', 'w', newline='') as file:
-    #     writer = csv.writer(file)
-    #     for i in range(len(populasi_awal)):
-    #         writer.writerow(populasi_awal[i])
     
+    history_fitness_treble = []
+    history_fitness_bass = []
+    history_fitness_treble.append(total_fitness_treble_list)
+    history_fitness_bass.append(total_fitness_bass_list)
     max_fitness_indiv = 0
     max_fitness = 0
     populasi_next_treble = populasi_awal[0]
     populasi_next_bass = populasi_awal[1]
     best_fitness_list = []
     for i in range(banyak_generasi-1):
-        populasi_next_treble = update_generasi(populasi_next_treble, total_fitness_treble_list, banyak_individu)
-        populasi_next_bass = update_generasi(populasi_next_bass, total_fitness_bass_list, banyak_individu)
+        # populasi_next_treble = update_generasi(populasi_next_treble, total_fitness_treble_list, banyak_individu)
+        # populasi_next_bass = update_generasi(populasi_next_bass, total_fitness_bass_list, banyak_individu)
         hasil_mutasi = mutasi_generasi(populasi_next_treble, populasi_next_bass, banyak_birama, anggota_birama, probabilitas_mutasi, range_nada, banyak_individu)
         hasil_mutasi_treble = hasil_mutasi[0]
         hasil_mutasi_bass = hasil_mutasi[1]
@@ -149,6 +128,8 @@ if __name__ == "__main__":
         
         total_fitness_treble_list = hitung_fitness(populasi_next_treble, range_nada, banyak_birama, anggota_birama)
         total_fitness_bass_list = hitung_fitness_bass(populasi_next_bass, 8, anggota_birama)
+        history_fitness_treble.append(total_fitness_treble_list)
+        history_fitness_bass.append(total_fitness_bass_list)
         best_fitness_list.append(max(total_fitness_treble_list))
         if max_fitness < max(total_fitness_treble_list):
             max_fitness = max(total_fitness_treble_list)
@@ -158,9 +139,11 @@ if __name__ == "__main__":
     # # print(max_fitness)
     # # print(max_fitness_indiv)
     # print(populasi_next_treble)
-    print(populasi_next_bass)
+    # print(populasi_next_bass)
     # print(total_fitness_treble_list)
     # print(total_fitness_bass_list)
+    report = gp.generate_csv(populasi_awal,populasi_next_treble,populasi_next_bass,total_fitness_treble_list,total_fitness_bass_list)
+    process_fitness = gp.proses_fitness(history_fitness_treble,history_fitness_bass)
 
     translated = []
     # translated_best = tm.translate(max_fitness_indiv, banyak_birama, anggota_birama, range_nada, tangga_nada)
@@ -171,7 +154,7 @@ if __name__ == "__main__":
     temp_translated= []
     for i in range(len(populasi_next_bass)):
         temp_individu = []
-        for j in range(anggota_birama+1):
+        for j in range(banyak_birama):
             temp_birama = []
             for k in range(anggota_birama):
                 temp_birama.append(populasi_next_bass[i][j])
@@ -179,7 +162,6 @@ if __name__ == "__main__":
         temp_translated.append(temp_individu)
     for i in range(len(temp_translated)):
         translated_chord.append(cm.translate(temp_translated[i], anggota_birama, range_nada, tangga_nada))
-    # print(translated_chord)
     def scale(tangga_nada):
         return {
             'C': 'c',
