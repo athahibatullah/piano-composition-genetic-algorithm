@@ -3,7 +3,6 @@ import GA
 import parameter_fitness as pf
 import parameter_fitness_bass as pfb
 import fungsi_fitness as ff
-import csv
 import tone_map as tm
 import chord_map as cm
 import generate_report as gp
@@ -14,12 +13,13 @@ probabilitas_mutasi = int(input("Probabilitas mutasi: "))/100
 banyak_generasi = 10
 range_nada = 14+1
 anggota_birama = 4
+kriteria_fitness = 50
 tangga_nada = 'C'
 bpm = 120
 individu_referensi_treble = [[[7, 14, 5, 0], [12, 2, 4, [4, 13, 7, 6]], [3, 7, 11, 1], [[13, 10, 6, 12], 7, 6, 6], [9, 4, 0, [12, 6, 1, 11]]]]
 individu_referensi_bass = [3, 7, 3, 3, 4]
-individu_referensi_treble = []
-individu_referensi_bass = []
+# individu_referensi_treble = []
+# individu_referensi_bass = []
 komposisi_treble = []
 komposisi_bass = []
 
@@ -53,10 +53,10 @@ def hitung_fitness(populasi_awal, range_nada, banyak_birama, anggota_birama, fit
         sum_fitness_birama_all = ff.sum_fitness_birama_all(sum_fitness_birama)
         mean_interval_birama = ff.mean_interval_birama(populasi_awal[i], banyak_birama, anggota_birama, range_nada)
         sum_mean_interval_birama = ff.sum_mean_interval_birama(mean_interval_birama)
-        sum_mean_interval_birama = fitness_individu_referensi_treble[0] - sum_mean_interval_birama
+        sum_mean_interval_birama = abs(fitness_individu_referensi_treble[0] - sum_mean_interval_birama)
         varian_interval_birama = ff.varian_interval_birama(populasi_awal[i], banyak_birama, anggota_birama, range_nada, mean_interval_birama)
         sum_varian_interval_birama = ff.sum_varian_interval_birama(varian_interval_birama)
-        sum_varian_interval_birama = fitness_individu_referensi_treble[1] - sum_varian_interval_birama
+        sum_varian_interval_birama = abs(fitness_individu_referensi_treble[1] - sum_varian_interval_birama)
         total_fitness = ff.total_fitness(sum_mean_interval_birama,sum_varian_interval_birama,sum_fitness_birama_all)
         total_fitness_list.append(total_fitness)
     
@@ -78,9 +78,9 @@ def hitung_fitness_bass(populasi_awal, range_nada, anggota_birama, fitness_indiv
         mean_interval_birama = ff.mean_interval_birama_bass(populasi_awal[i], anggota_birama)
         varian_interval_birama = ff.varian_interval_birama_bass(populasi_awal[i], anggota_birama, mean_interval_birama)
         sum_mean_interval_birama = ff.sum_mean_interval_birama(mean_interval_birama)
-        sum_mean_interval_birama = fitness_individu_referensi_bass[0] - sum_mean_interval_birama
+        sum_mean_interval_birama = abs(fitness_individu_referensi_bass[0] - sum_mean_interval_birama)
         sum_varian_interval_birama = ff.sum_varian_interval_birama(varian_interval_birama)
-        sum_varian_interval_birama = fitness_individu_referensi_bass[1] - sum_varian_interval_birama
+        sum_varian_interval_birama = abs(fitness_individu_referensi_bass[1] - sum_varian_interval_birama)
         total_fitness = ff.total_fitness(sum_mean_interval_birama,sum_varian_interval_birama,sum_fitness_birama)
         total_fitness_list.append(total_fitness)
     
@@ -165,6 +165,8 @@ if __name__ == "__main__":
         if max_fitness < max(total_fitness_treble_list):
             max_fitness = max(total_fitness_treble_list)
             max_fitness_indiv = populasi_next_treble[total_fitness_treble_list.index(max_fitness)]
+        if kriteria_fitness <= max_fitness and kriteria_fitness != 0:
+            break
 
     # fitnes_komposisi_referensi = 
     # # print(best_fitness_list)
